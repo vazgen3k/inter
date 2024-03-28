@@ -1,6 +1,8 @@
-from src.tasks.celery_config import celery_app
 import os
 import shutil
+
+from src.tasks.celery_config import celery_app
+
 
 @celery_app.task
 def clear_temp_folder():

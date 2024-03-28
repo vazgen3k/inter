@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root:request
+  xmlns:root="http://rosreestr.ru/services/v0.25/TRequest">
+  <root:statementFile>
+    <root:fileName>claim.xml</root:fileName>
+  </root:statementFile>
+  <root:file>
+    <root:fileName>claim.xml.sig</root:fileName>
+  </root:file>
+      <root:file>
+    <root:fileName>request.xml</root:fileName>
+  </root:file>
+  <root:file>
+      <root:fileName>Тестовая_доверенность.pdf</root:fileName>
+  </root:file>
+  <root:file>
+      <root:fileName>Постановление.pdf</root:fileName>
+  </root:file>
+  <root:requestType>111300001000</root:requestType>
+</root:request>
