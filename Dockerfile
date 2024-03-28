@@ -1,8 +1,8 @@
 FROM python:3.9
 
-RUN mkdir /Mosobl
+RUN mkdir /mosobl
 
-WORKDIR /Mosobl
+WORKDIR /mosobl
 
 COPY requirements.txt .
 
@@ -10,4 +10,4 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+RUN chmod a+x /mosobl/docker/*.sh
