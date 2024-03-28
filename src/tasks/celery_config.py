@@ -14,8 +14,8 @@ celery_app = Celery(
 # Настройка расписания для периодических задач
 celery_app.conf.beat_schedule = {
     # Определение задачи для ежечасной очистки временной папки
-    "clean-temp-folder-every-minute": {
+    "clean-temp-folder-every-hour": {
         "task": "src.tasks.task.clear_temp_folder",
-        "schedule": crontab("*"),
+        "schedule": crontab(minute=0),
     },
 }
