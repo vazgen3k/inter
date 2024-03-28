@@ -13,6 +13,16 @@ router = APIRouter(prefix="/interview", tags=["interview"])
 async def get_file(
     uuid: UUID, creditionals: HTTPBasicCredentials = Depends(HTTPBasic())
 ):
+    """
+    Получение файла по UUID.
+    
+    Аутентифицирует пользователя с помощью HTTP Basic Auth и, если аутентификация прошла успешно,
+    использует FileManager для получения файла по UUID.
+    
+    :param uuid: UUID файла для загрузки.
+    :param credentials: Учетные данные пользователя, полученные через HTTP Basic Auth.
+    :return: JSONResponse с информацией о файле или HTTPException в случае ошибки.
+    """
     if (
         creditionals.username != config["auth_info"]["basic"]["username"]
         or creditionals.username != config["auth_info"]["basic"]["password"]
@@ -28,7 +38,16 @@ async def get_file(
 async def download_zip(
     request: Request, creditionals: HTTPBasicCredentials = Depends(HTTPBasic())
 ):
-
+    """
+    Скачивание архива с файлами.
+    
+    Аутентифицирует пользователя и проверяет наличие куки "mojo". Если проверки пройдены,
+    использует FileZipper для создания архива с файлами и FileSender для его отправки.
+    
+    :param request: Объект запроса FastAPI для доступа к кукам.
+    :param credentials: Учетные данные пользователя, полученные через HTTP Basic Auth.
+    :return: FileResponse с архивом или HTTPException в случае ошибки.
+    """
     cookies = request.cookies
 
     if (

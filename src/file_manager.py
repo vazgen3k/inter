@@ -11,11 +11,23 @@ from starlette.responses import FileResponse
 
 class Manager:
     def __init__(self, config):
+        """
+        Базовый класс менеджера, инициализирующий конфигурацию.
+        :param config: Словарь конфигурации приложения.
+        """
         self.config = config
 
 
 class FileManager(Manager):
-
+    """
+    Получение файла по UUID и его сохранение.
+        
+    Выполняет HTTP GET запрос к внешнему API для получения файла по UUID,
+    сохраняет файл во временной директории и возвращает информацию о файле.
+        
+    :param uuid: UUID файла для загрузки.
+    :return: JSONResponse с информацией о файле.
+    """
     async def fetch_file_by_uuid(self, uuid: str):
         file_url = f"{self.config['files_info']['api_url']}?keys={uuid}"
         async with httpx.AsyncClient() as client:
@@ -52,6 +64,7 @@ class FileManager(Manager):
         return os.path.join(self.config["files_info"]["temp_dir"], unique_filename)
 
     def _save_file(self, file_path: str, content: bytes):
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
         with open(file_path, "wb") as file:
             file.write(content)
 
@@ -63,7 +76,7 @@ class FileZipper(Manager):
         with ZipFile(zip_path, "w") as zipf:
             for root, dir, files in os.walk(temp_dir):
                 for file in files:
-                    if file != zip_filename and file != ".gitkeep":
+                    if file != zip_filename:
                         zipf.write(os.path.join(root, file), arcname=file)
 
         return zip_path

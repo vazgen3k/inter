@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 
-from src.router import router
+from src.router import router as router_uuid
 
+# Создание экземпляра приложения FastAPI
 app = FastAPI()
 
-
-app.include_router(router)
+# Подключение роутера к приложению
+app.include_router(router_uuid)

@@ -1,6 +1,5 @@
 version: '3.8'
 services:
-
   web:
     container_name: web
     build: .
@@ -9,13 +8,16 @@ services:
     command: sh -c "gunicorn src.main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind=0.0.0.0:8000"
     ports:
       - 8000:8000
-    
+    depends_on:
+      - redis
+
   redis:
     image: "redis:alpine"
 
   celery_worker:
+    container_name: celery_worker
     build: .
-    command: celery -A src.tasks.celery_config worker --loglevel=info
+    command: celery -A src.tasks.celery_config:celery_app worker --loglevel=INFO --pool=solo
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
@@ -23,12 +25,11 @@ services:
       - redis
 
   celery_beat:
+    container_name: celery_beat
     build: .
-    command:  celery -A src.tasks.celery_config beat 
+    command: celery -A src.tasks.celery_config:celery_app beat
     environment:
-      - CELERY_BROKER_URL=redis://redis:6379
-      - CELERY_RESULT_BACKEND=redis://redis:6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
     depends_on:
       - redis
-
-
